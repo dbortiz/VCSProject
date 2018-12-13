@@ -12,7 +12,8 @@ namespace fs = std::experimental::filesystem;
 std::string artifactID(fs::path);
 void createRepository(std::string, std::string);
 
-//void checkout(std::string,std::string,std::string);	//Addition to the File
+void checkout(std::string,std::string,std::string);	//Addition to the File
+bool manfileExists(fs::path, std::string);
 
 std::string artifactID(fs::path directoryPath) {
 	std::string artifactFile;
@@ -56,7 +57,7 @@ void createRepository(std::string existingDirectory, std::string newDirectory) {
 	fs::path currentPath = existingDirectory;
 	std::cout << "current path: " << currentPath << std::endl;
 	std::ofstream maniFile_;
-	maniFile_.open(currentPath+".txt");		//Creates the manifest file for the repo of the given path
+	maniFile_.open("manifest.txt");		//Creates the manifest file for the repo of the given path
 	fs::copy(existingDirectory, newDirectory, fs::copy_options::recursive);
 	for (auto &it : fs::recursive_directory_iterator(newDirectory)) {
 		if (fs::is_regular_file(it.path())) {
@@ -69,16 +70,17 @@ void createRepository(std::string existingDirectory, std::string newDirectory) {
 	}
 	maniFile_.close();
 }
-//manfileExists()
 
-checkout(std::string repoToCheckout, std::string directoryTarget, std::string manFile)  //"checks out repo (copies the repository)"
-{
-   fs::path repoPath = repoToCheckout;
-	 if()
-	 std:: cout <<"Checking out: current path: "<< repoToCheckout<< std::endl;
-	 std::
- 	 if(fs::exists )
- 	 fs::copy(repoToCheckout, newDirectory, fs::copy_options::recur)
-   std::ifstream directoryFile;
-	 directoryFile.open(directoryPath);
-}
+
+ void checkout(std::string repoToCheckout, std::string directoryTarget, std::string manifestFile)  //"checks out repo (copies the repository)"
+ {
+ 	  	std:: ofstream nameManfile_;
+      fs::path repoPath = repoToCheckout;
+			fs::path targetPath = directoryTarget;
+ 	  	nameManfile_.open(manifestFile+".txt",std::fstream::app);
+ 	   	std:: cout <<"Checking out: "<<repoPath<<"\nNew path: "<< targetPath << std::endl;
+			nameManfile_ << "Checked Out  "<< repoPath <<std::endl;
+			fs::copy(repoToCheckout,targetPath, fs::copy_options::recursive);		//Creates new repository
+			nameManfile_.close();
+  }
+ 
