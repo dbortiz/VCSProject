@@ -52,7 +52,7 @@ std::string artifactID(fs::path directoryPath) {
 
 void createRepository(std::string existingDirectory, std::string newDirectory) {
 	fs::path currentPath = existingDirectory;
-	std::cout << "current path: " << currentPath << std::endl;
+	// std::cout << "current path: " << currentPath << std::endl;
 
 	fs::copy(existingDirectory, newDirectory, fs::copy_options::recursive);
 	for (auto &it : fs::recursive_directory_iterator(newDirectory)) {
@@ -62,4 +62,6 @@ void createRepository(std::string existingDirectory, std::string newDirectory) {
 			fs::rename(it.path(), fs::path(it.path()).replace_filename(newArtifact));
 		}
 	}
+
+	std::cout << "Repository successfully created." << std::endl;
 }
