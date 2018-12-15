@@ -5,11 +5,13 @@
 #include <string>
 #include <experimental/filesystem>
 
+
 namespace fs = std::experimental::filesystem;
 
 
 std::string artifactID(fs::path);
 void createRepository(std::string, std::string);
+
 
 
 std::string artifactID(fs::path directoryPath) {
@@ -53,15 +55,22 @@ std::string artifactID(fs::path directoryPath) {
 void createRepository(std::string existingDirectory, std::string newDirectory) {
 	fs::path currentPath = existingDirectory;
 	// std::cout << "current path: " << currentPath << std::endl;
-
+	fs::path repoPath = newDirectory;
+		// Had an idea to create a manifest file that logged each thing done. Once the repo was finished being made
+		// there would be an artId that would rename the Manifest file so we would know if there were changes to it.
+		// Couldnt implement. Below is the commented out code
+	// std:: ofstream manifestFile;
+	// manifestFile.open("tempName.txt", std::fstream::app);
 	fs::copy(existingDirectory, newDirectory, fs::copy_options::recursive);
 	for (auto &it : fs::recursive_directory_iterator(newDirectory)) {
 		if (fs::is_regular_file(it.path())) {
 			std::string newArtifact = artifactID(it.path());
-
+			// maniFile_ << it.path() << "\t"<<newArtifact << std::endl;
 			fs::rename(it.path(), fs::path(it.path()).replace_filename(newArtifact));
 		}
 	}
-
+	// manifestFile.close();
+	// std::string manifestFileArtifact = artifactID(repoPath.path());
+	// fs::rename(repoPath.path(),fs::path(repoPath.path()).replace_filename(manifestFileArtifact));
 	std::cout << "Repository successfully created." << std::endl;
 }
