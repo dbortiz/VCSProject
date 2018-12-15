@@ -58,8 +58,15 @@ void createRepository(std::string existingDirectory, std::string newDirectory) {
 
 	fs::create_directories(newPath);
 
+	std::ofstream manifestFile;
+	fs::path manifest = newPath /= "manifest.txt";
+
+	manifestFile.open(manifest, std::ios_base::app);
+
 	for (auto it = fs::recursive_directory_iterator(currentPath); it != fs::recursive_directory_iterator(); ++it) {
 		fs::path path = it->path(); // Path to track current iterator path
+		
+
 		std::string targetPath = path.string(); // TargetPath is string to use substr
 		targetPath = targetPath.substr(targetPath.find_first_of('\\')); // and get rest of path after TestFolder\'
 		
@@ -68,10 +75,13 @@ void createRepository(std::string existingDirectory, std::string newDirectory) {
 
 			if (fs::is_regular_file(path)) {
 				std::string newArtifact = artifactID(path);
+				manifestFile << newArtifact << std::endl;
 				fs::copy_file(path, newDirectory + targetPath + "\\" + newArtifact);
 			}
 		}
 	}
+
+	manifestFile.close();
 }
 
 // Function used from: https://stackoverflow.com/questions/12774207/fastest-way-to-check-if-a-file-exist-using-standard-c-c11-c
