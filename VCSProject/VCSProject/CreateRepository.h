@@ -11,6 +11,8 @@ namespace fs = std::experimental::filesystem;
 std::string artifactID(fs::path);
 void createRepository(std::string, std::string);
 
+bool dirNotExist(const std::string& name);
+
 
 std::string artifactID(fs::path directoryPath) {
 	std::string artifactFile;
@@ -52,16 +54,33 @@ std::string artifactID(fs::path directoryPath) {
 
 void createRepository(std::string existingDirectory, std::string newDirectory) {
 	fs::path currentPath = existingDirectory;
-	// std::cout << "current path: " << currentPath << std::endl;
+	fs::path newPath = newDirectory;
 
-	fs::copy(existingDirectory, newDirectory, fs::copy_options::recursive);
-	for (auto &it : fs::recursive_directory_iterator(newDirectory)) {
-		if (fs::is_regular_file(it.path())) {
-			std::string newArtifact = artifactID(it.path());
+	fs::create_directories(newPath);
 
-			fs::rename(it.path(), fs::path(it.path()).replace_filename(newArtifact));
+	for (auto it = fs::recursive_directory_iterator(currentPath); it != fs::recursive_directory_iterator(); ++it) {
+		fs::path path = it->path(); // Path to track current iterator path
+		std::string targetPath = path.string(); // TargetPath is string to use substr
+		targetPath = targetPath.substr(targetPath.find_first_of('\\')); // and get rest of path after TestFolder\'
+		
+		if (dirNotExist(path.string())) {
+			fs::create_directories(newDirectory + targetPath);
+
+			if (fs::is_regular_file(path)) {
+				std::string newArtifact = artifactID(path);
+				fs::copy_file(path, newDirectory + targetPath + "\\" + newArtifact);
+			}
 		}
 	}
+}
 
-	std::cout << "Repository successfully created." << std::endl;
+// Function used from: https://stackoverflow.com/questions/12774207/fastest-way-to-check-if-a-file-exist-using-standard-c-c11-c
+bool dirNotExist(const std::string& name) {
+	if (FILE *file = fopen(name.c_str(), "r")) {
+		fclose(file);
+		return true;
+	}
+	else {
+		return false;
+	}
 }

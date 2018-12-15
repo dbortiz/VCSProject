@@ -55,6 +55,22 @@ int main() {
 
 		break;
 	}
+	/*
+	case 3:
+		std::string userDirectory;
+		std::string labelName;
+		std::string userTargetDirectory;
+		std::cout << "You have selected: 3. Check out." << std::endl;
+
+		std::cout << "Current path: " << fs::current_path() << "\n\n" << std::endl;
+
+		std::cout << "Name of existing directory:" << std::endl;
+		std::cin >> userDirectory;
+		std::cout << "Name of the label:" << std::endl;
+		std::cin >> labelName;
+		std::cout << "Name of target directory:" << std::endl;
+		std::cin >> userTargetDirectory;
+	*/
 
 	default:
 		std::cout << "Invalid option" << std::endl;
