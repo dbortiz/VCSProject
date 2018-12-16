@@ -4,7 +4,7 @@
 #include <map>
 #include "CreateRepository.h"
 #include "Label.h"
-
+#include "CheckOut.h"
 namespace fs = std::experimental::filesystem;
 
 extern std::map<std::string, fs::path> labels;
@@ -13,7 +13,7 @@ int main() {
 	int userSelection;
 
 	std::cout << "What would you like to do?\n" << std::endl;
-	std::cout << "(1) Create repository.\n(2) Create label." << std::endl;
+	std::cout << "(1) Create repository.\n(2) Create label.\n(3) Checkout." << std::endl;
 	std::cin >> userSelection;
 
 	
@@ -55,8 +55,9 @@ int main() {
 
 		break;
 	}
-	/*
+	
 	case 3:
+	{
 		std::string userDirectory;
 		std::string labelName;
 		std::string userTargetDirectory;
@@ -70,7 +71,9 @@ int main() {
 		std::cin >> labelName;
 		std::cout << "Name of target directory:" << std::endl;
 		std::cin >> userTargetDirectory;
-	*/
+
+		checkOut(userDirectory, labelName, userTargetDirectory);
+	}
 
 	default:
 		std::cout << "Invalid option" << std::endl;
