@@ -5,14 +5,12 @@
 #include <string>
 #include <experimental/filesystem>
 
-
 namespace fs = std::experimental::filesystem;
 
 
 std::string artifactID(fs::path);
 void createRepository(std::string, std::string);
-
-
+bool dirNotExist(const std:: string& name);
 
 std::string artifactID(fs::path directoryPath) {
 	std::string artifactFile;
@@ -54,23 +52,43 @@ std::string artifactID(fs::path directoryPath) {
 
 void createRepository(std::string existingDirectory, std::string newDirectory) {
 	fs::path currentPath = existingDirectory;
+	fs::path newPath = newDirectory;
+
+	fs::create_directories(newPath);
+
+	std::ofstream manifestFile;
+	fs::path manifest = newPath /= "manifest.txt";
+
 	// std::cout << "current path: " << currentPath << std::endl;
-	fs::path repoPath = newDirectory;
-		// Had an idea to create a manifest file that logged each thing done. Once the repo was finished being made
-		// there would be an artId that would rename the Manifest file so we would know if there were changes to it.
-		// Couldnt implement. Below is the commented out code
-	// std:: ofstream manifestFile;
-	// manifestFile.open("tempName.txt", std::fstream::app);
-	fs::copy(existingDirectory, newDirectory, fs::copy_options::recursive);
-	for (auto &it : fs::recursive_directory_iterator(newDirectory)) {
-		if (fs::is_regular_file(it.path())) {
-			std::string newArtifact = artifactID(it.path());
-			// maniFile_ << it.path() << "\t"<<newArtifact << std::endl;
-			fs::rename(it.path(), fs::path(it.path()).replace_filename(newArtifact));
+	manifestFile.open(manifest, std::ios_base::app);
+
+//	fs::copy(existingDirectory, newDirectory, fs::copy_options::recursive);
+	for (auto it = fs::recursive_directory_iterator(currentPath); it != fs::recursive_directory_iterator(); ++it) {
+		fs:: path path = it->path(); //Path to track current iterator path
+
+		std::string targetPath = path.string(); // TargetPath is string to use substr
+		targetPath = targetPath.substr(targetPath.find_first_of("/")); // and get rest of path after TestFolder\'
+
+		if (dirNotExist(path.string())) {
+				fs::create_directories(newDirectory + targetPath);
+
+				if(fs::is_regular_file(path)){
+							std::string newArtifact = artifactID(path);
+							manifestFile << newArtifact << std::endl;
+							fs::copy_file(path, newDirectory +targetPath + "/" + newArtifact);
+				}
 		}
 	}
-	// manifestFile.close();
-	// std::string manifestFileArtifact = artifactID(repoPath.path());
-	// fs::rename(repoPath.path(),fs::path(repoPath.path()).replace_filename(manifestFileArtifact));
-	std::cout << "Repository successfully created." << std::endl;
+		manifestFile.close();
+//	std::cout << "Repository successfully created." << std::endl;
+}
+
+bool dirNotExist(const std::string& name){
+		if(FILE *file = fopen(name.c_str(), "r")) {
+				fclose(file);
+				return true;
+		}
+		else {
+				return false;
+		}
 }
