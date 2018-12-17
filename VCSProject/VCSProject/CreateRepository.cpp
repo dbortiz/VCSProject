@@ -20,6 +20,7 @@
 #include "Label.h"
 #include "CheckOut.h"
 #include "CheckIn.h"
+#include "Merge.h"
 
 namespace fs = std::experimental::filesystem;
 
@@ -120,6 +121,32 @@ int main() {
 		break;
 	}
 
+	// This was intended for Merge.
+	/*
+	case 5:
+	{
+		std::string mainline;
+		std::string repository1;
+		std::string repository2;
+
+		std::cout << "You have selected: 5. Merge." << std::endl;
+
+		std::cout << "Current path: " << fs::current_path() << "\n\n" << std::endl;
+
+		std::cout << "Name of directory:" << std::endl;
+		std::cin >> mainline;
+		std::cout << "Name of 1st repository:" << std::endl;
+		std::cin >> repository1;
+		std::cout << "Name of 2nd repository:" << std::endl;
+		std::cin >> repository2;
+
+		std::cout << "\n\n";
+
+		merge(mainline, repository1, repository2);
+
+		break;
+	}
+	*/
 	default:
 		std::cout << "Invalid option" << std::endl;
 		break;
