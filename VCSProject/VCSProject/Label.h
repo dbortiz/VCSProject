@@ -33,7 +33,7 @@ catch(const fs::filesystem_error &e){
 }
 
 // Function to return path of found label in text file
-fs::path lookForLabel(std::string labelName) {
+bool lookForLabel(std::string labelName) {
 	std::ifstream labelFile("FileToHoldLabels.txt");
 	std::string linkName;
 	fs::path pathToLabel;
@@ -51,7 +51,8 @@ fs::path lookForLabel(std::string labelName) {
 		if (it->first == labelName) {
 			std::cout << "Found label!" << std::endl;
 			std::cout << it->second << std::endl;
-			return it->second;
+			return true;
 		}
 	}
+	return false;
 }
