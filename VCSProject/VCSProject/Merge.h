@@ -1,4 +1,4 @@
-/*This header file does not work.*/
+/*This header file does not work. */
 
 #pragma once
 #include <iostream>

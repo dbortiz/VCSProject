@@ -62,8 +62,6 @@ bool lookForLabel(std::string labelName) {
 	std::map<std::string, fs::path>::iterator it;
 	for (it = labels.begin(); it != labels.end(); ++it) {
 		if (it->first == labelName) {
-			std::cout << "Found label!" << std::endl;
-			std::cout << it->second << std::endl;
 			return true;
 		}
 	}

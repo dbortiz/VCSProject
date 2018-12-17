@@ -30,7 +30,8 @@ int main() {
 	int userSelection;
 
 	std::cout << "What would you like to do?\n" << std::endl;
-	std::cout << "(1) Create repository.\n(2) Create label.\n(3) Checkout.\n(4) Checkin." << std::endl;
+	std::cout << "(1) Create repository.\n(2) Create label.\n(3) Checkout.\n(4) Checkin.\n" << std::endl;
+	std::cout << "Your selection: ";
 	std::cin >> userSelection;
 
 	
@@ -64,7 +65,7 @@ int main() {
 
 		std::cout << "Current path: " << fs::current_path() << "\n\n" << std::endl;
 
-		std::cout << "Name of existing directory: " << std::endl;
+		std::cout << "Name of existing repository: " << std::endl;
 		std::cin >> userDirectory;
 		std::cout << "Name of manifest file: " << std::endl;
 		std::cin >> userManifestFile;
@@ -87,11 +88,11 @@ int main() {
 
 		std::cout << "Current path: " << fs::current_path() << "\n\n" << std::endl;
 
-		std::cout << "Name of existing directory:" << std::endl;
+		std::cout << "Name of existing repository:" << std::endl;
 		std::cin >> userDirectory;
 		std::cout << "Name of the label or manifest path:" << std::endl;
 		std::cin >> labelName;
-		std::cout << "Name of target directory:" << std::endl;
+		std::cout << "Name of target repository:" << std::endl;
 		std::cin >> userTargetDirectory;
 
 		std::cout << "\n\n";

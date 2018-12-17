@@ -107,4 +107,5 @@ void checkIn(std::string repository, std::string checkedOut) {
 	}
 
 	newManifestFile.close();
+	std::cout << "Successfully checked in." << std::endl;
 }

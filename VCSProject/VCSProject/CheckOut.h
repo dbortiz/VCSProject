@@ -34,7 +34,6 @@ void checkOut(std::string existingDirectory, std::string labelName, std::string 
 		std::map<std::string, fs::path>::iterator it;
 		for (it = labels.begin(); it != labels.end(); ++it) {
 			if (it->first == label) {
-				std::cout << "Found label!" << std::endl;
 				currentDirectory = it->second.parent_path();
 				manifestPath = it->second;
 			}
@@ -43,8 +42,6 @@ void checkOut(std::string existingDirectory, std::string labelName, std::string 
 	else {
 		for (auto it : fs::recursive_directory_iterator(currentDirectory)) {
 			if (it.path().filename() == labelName) {
-				std::cout << "Found manifest" << std::endl;
-				std::cout << it.path().parent_path();
 				currentDirectory = it.path().parent_path();
 				manifestPath = it.path();
 			}
@@ -84,4 +81,5 @@ void checkOut(std::string existingDirectory, std::string labelName, std::string 
 		}
 			
 	}
+	std::cout << "Successfully checked out!" << std::endl;
 }
