@@ -1,3 +1,16 @@
+/*
+	Team Name:
+			DAA
+	Authors:
+			Dan Ortiz				dbortiz@csu.fullerton.edu
+			Aaron Jimenez-Lopez		aaronjimenez97@csu.fullerton.edu
+	Description:
+			This header file is for the create repository and check sum functions. The create repository
+			function creates a repository of an already existing directory. The artifact ID function
+			follows the check sum algorithm provided in the project descriptiona and converts the original
+			file found in the existing directory to an artifact with the existing file contents.
+
+*/
 #pragma once
 #include <iostream>
 #include <fstream>
@@ -86,7 +99,8 @@ void createRepository(std::string existingDirectory, std::string newDirectory) {
 
 // Function used from: https://stackoverflow.com/questions/12774207/fastest-way-to-check-if-a-file-exist-using-standard-c-c11-c
 bool dirNotExist(const std::string& name) {
-	if (FILE *file = fopen(name.c_str(), "r")) {
+	if (FILE *file = fopen
+	(name.c_str(), "r")) {
 		fclose(file);
 		return true;
 	}

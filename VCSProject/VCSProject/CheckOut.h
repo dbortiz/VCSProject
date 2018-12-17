@@ -1,3 +1,15 @@
+/*
+	Team Name:
+			DAA
+	Authors:
+			Dan Ortiz				dbortiz@csu.fullerton.edu
+			Aaron Jimenez-Lopez		aaronjimenez97@csu.fullerton.edu
+	Description:
+			This header file is for the check out function. The check out function
+			looks at the existing repository's manifest file and copies all the files
+			within the manifest file into a new (checked out) repository.
+*/
+
 #pragma once
 #include <iostream>
 #include <experimental/filesystem>
@@ -30,7 +42,7 @@ void checkOut(std::string existingDirectory, std::string labelName, std::string 
 	}
 	else {
 		for (auto it : fs::recursive_directory_iterator(currentDirectory)) {
-			if (it.path().filename() == label) {
+			if (it.path().filename() == labelName) {
 				std::cout << "Found manifest" << std::endl;
 				std::cout << it.path().parent_path();
 				currentDirectory = it.path().parent_path();
@@ -47,6 +59,8 @@ void checkOut(std::string existingDirectory, std::string labelName, std::string 
 	while (contentsOfManifest >> artifact) {
 		files.push_back(artifact);
 	}
+
+	contentsOfManifest.close();
 
 	// Creates target directory
 	fs::create_directories(newDirectory);

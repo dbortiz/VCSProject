@@ -1,3 +1,16 @@
+/*
+	Team Name:
+			DAA
+	Authors:
+			Dan Ortiz				dbortiz@csu.fullerton.edu
+			Aaron Jimenez-Lopez		aaronjimenez97@csu.fullerton.edu
+	Description:
+			This header file is for the label function. The create label function takes a manifest
+			name and its path. Then, a file, FileToHoldLabels.txt, to hold the labels is created and
+			hold the manifest and its path. The look for label helper function is used to grab the 
+			contents of the file holding the labels and refer to the path when called.
+*/
+
 #pragma once
 #include <iostream>
 #include <fstream>
@@ -38,14 +51,14 @@ bool lookForLabel(std::string labelName) {
 	std::string linkName;
 	fs::path pathToLabel;
 
+	// Puts contents of the file into a map
 	if (labelFile.is_open()) {
 		while (labelFile >> linkName >> pathToLabel) {
 			labels.insert(std::pair<std::string, fs::path>(linkName, pathToLabel));
-			// std::cout << "linkName: " << linkName << "\npathToLabel: " << pathToLabel << std::endl;
 		}
 	}
 
-
+	// Loops through the map to find a requested label (if it exists).
 	std::map<std::string, fs::path>::iterator it;
 	for (it = labels.begin(); it != labels.end(); ++it) {
 		if (it->first == labelName) {
