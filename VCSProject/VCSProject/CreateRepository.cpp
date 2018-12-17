@@ -3,8 +3,10 @@
 #include <experimental/filesystem>
 #include <map>
 #include "CreateRepository.h"
-#include "Label.h"
 #include "CheckOut.h"
+#include "CheckIn.h"
+#include "Label.h"
+
 namespace fs = std::experimental::filesystem;
 
 extern std::map<std::string, fs::path> labels;
@@ -13,10 +15,12 @@ int main() {
 	int userSelection;
 
 	std::cout << "What would you like to do?\n" << std::endl;
-	std::cout << "(1) Create repository.\n(2) Create label.\n(3) Checkout." << std::endl;
-	std::cin >> userSelection;
+	std::cout << "(1) Create repository.\n(2) Create label.\n(3) Checkout.\n(4) Checkin.\n" << std::endl;
 
-	
+
+	do{
+
+		std::cin >> userSelection;
 	switch (userSelection)
 	{
 	case 1: {
@@ -55,31 +59,43 @@ int main() {
 
 		break;
 	}
-	
 	case 3:
 	{
-		std::string userDirectory;
-		std::string labelName;
-		std::string userTargetDirectory;
-		std::cout << "You have selected: 3. Check out." << std::endl;
+		std:: string userSource;
+		std:: string userTarget;
+		std:: string userManFile;
+		std::cout<< "You have selected: 3. Checkout."<< std::endl;
+		std::cout<< "Name of Repo to Checkout: "<< std ::endl;
+		std::cin >> userSource;
+		std::cout << "New Repository name: "<<std::endl;
+		std::cin >> userTarget;
+		std::cout<< "Name of Manifest file to log."<<std::endl;
+		std::cin >> userManFile;
 
-		std::cout << "Current path: " << fs::current_path() << "\n\n" << std::endl;
+		checkOut(userSource, userTarget, userManFile);
 
-		std::cout << "Name of existing directory:" << std::endl;
-		std::cin >> userDirectory;
-		std::cout << "Name of the label:" << std::endl;
-		std::cin >> labelName;
-		std::cout << "Name of target directory:" << std::endl;
-		std::cin >> userTargetDirectory;
-
-		checkOut(userDirectory, labelName, userTargetDirectory);
+		break;
 	}
+	case 4:
+	{
+		std:: string userRepo1;
+		std:: string userRepo2;
+		std:: cout<< "You have selected: 4. Checkin."<<std::endl;
+		std:: cout<< "Name of Repository One: "<< std::endl;
+		std:: cin >> userRepo1;
+		std:: cout<< "Name of Repository Two: "<<std::endl;
+		std:: cin >> userRepo2;
 
+		checkin(userRepo1,userRepo2);
+
+		break;
+	}
 	default:
 		std::cout << "Invalid option" << std::endl;
 		break;
 	}
-
+	std::cout <<"To exit enter 5"<<std::endl;
+}while(userSelection!=5);
 	return 0;
 
 }

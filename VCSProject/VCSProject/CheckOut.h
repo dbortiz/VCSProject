@@ -18,6 +18,7 @@ void checkOut(std::string existingDirectory, std::string labelName, std::string 
 	std::vector<std::string> files;
 
 	// if-else loop to check whether label or user-input manifest file
+	//Returns path not bool expression need to change
 	if (lookForLabel(label)) {
 		std::map<std::string, fs::path>::iterator it;
 		for (it = labels.begin(); it != labels.end(); ++it) {
@@ -42,7 +43,7 @@ void checkOut(std::string existingDirectory, std::string labelName, std::string 
 	// Opens manifest file and inputs artifacts in vector
 	std::ifstream contentsOfManifest;
 	std::string artifact;
-	contentsOfManifest.open(manifestPath);
+	contentsOfManifest.open(manifestPath.string());
 
 	while (contentsOfManifest >> artifact) {
 		files.push_back(artifact);
@@ -56,7 +57,7 @@ void checkOut(std::string existingDirectory, std::string labelName, std::string 
 		fs::path path = it->path(); // Path to track current iterator path
 
 		std::string targetPath = path.string(); // TargetPath is string to use substr
-		targetPath = targetPath.substr(targetPath.find_first_of('\\')); // and get rest of path after TestFolder\'
+		targetPath = targetPath.substr(targetPath.find_first_of("/")); // and get rest of path after TestFolder\'
 		// Nested for-loop to iterate through vector and add file and path to target directory
 		for (std::vector<std::string>::iterator vectorIt = files.begin(); vectorIt != files.end(); ++vectorIt) {
 			fs::path tempTargetPath = targetPath;
@@ -66,8 +67,8 @@ void checkOut(std::string existingDirectory, std::string labelName, std::string 
 				fs::create_directories(targetDirectory + tempTargetPath.parent_path().string());
 				fs::copy_file(path, targetDirectory + tempTargetPath.string());
 			}
-			
+
 		}
-			
+
 	}
 }

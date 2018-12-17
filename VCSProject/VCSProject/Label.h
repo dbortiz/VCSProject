@@ -11,7 +11,8 @@ namespace fs = std::experimental::filesystem;
 std::map<std::string, fs::path> labels;
 
 // Function to create labels and store in text file
-void createLabel(std::string existingDirectory, std::string manifestFile, std::string newLabel) try {
+void createLabel(std::string existingDirectory, std::string manifestFile, std::string newLabel) //try {
+{
 	fs::path currentPath = existingDirectory;
 	std::string textName = manifestFile;
 	std::string linkName = newLabel;
@@ -28,12 +29,12 @@ void createLabel(std::string existingDirectory, std::string manifestFile, std::s
 	}
 	labelFile.close();
 }
-catch(const fs::filesystem_error &e){
-	std::cout << e.what() << std::endl;
-}
+// catch(const fs::filesystem_error &e){
+// 	std::cout << e.what() << std::endl;
+// }
 
 // Function to return path of found label in text file
-fs::path lookForLabel(std::string labelName) {
+bool lookForLabel(std::string labelName) {
 	std::ifstream labelFile("FileToHoldLabels.txt");
 	std::string linkName;
 	fs::path pathToLabel;
@@ -51,7 +52,8 @@ fs::path lookForLabel(std::string labelName) {
 		if (it->first == labelName) {
 			std::cout << "Found label!" << std::endl;
 			std::cout << it->second << std::endl;
-			return it->second;
+			return true;
+			//return it->second;
 		}
 	}
 }
