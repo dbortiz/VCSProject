@@ -5,32 +5,39 @@
 #include <map>
 #include <experimental/filesystem>
 
+#include <chrono>
+#include <iomanip>
+
 namespace fs = std::experimental::filesystem;
+using namespace std:: chrono_literals;
 // Needs target's filename or label.
 
 std::map<std::string, fs::path> labels;
 
 // Function to create labels and store in text file
-void createLabel(std::string existingDirectory, std::string manifestFile, std::string newLabel) try {
+void createLabel(std::string existingDirectory, std::string manifestFile, std::string newLabel) //try {
+{
 	fs::path currentPath = existingDirectory;
 	std::string textName = manifestFile;
 	std::string linkName = newLabel;
-
+	auto ftime = fs::last_write_time(currentPath);
+	std::time_t cftime =decltype(ftime)::clock::to_time_t(ftime);
 	std::ofstream labelFile;
 	labelFile.open("FileToHoldLabels.txt", std::ios_base::app);
 
 
 	for (auto it : fs::recursive_directory_iterator(currentPath)) {
 		if (it.path().filename() == textName){
-			labelFile << linkName << " " << it.path() << std::endl;
+
+			labelFile << linkName << " " << it.path()<<"\tTime label Created\t" << std::asctime(std::localtime(&cftime)) << std::endl;
 			std::cout << "Label created successfully." << std::endl;
 		}
 	}
 	labelFile.close();
 }
-catch(const fs::filesystem_error &e){
-	std::cout << e.what() << std::endl;
-}
+// catch(const fs::filesystem_error &e){
+// 	std::cout << e.what() << std::endl;
+// }
 
 // Function to return path of found label in text file
 bool lookForLabel(std::string labelName) {
@@ -52,7 +59,7 @@ bool lookForLabel(std::string labelName) {
 			std::cout << "Found label!" << std::endl;
 			std::cout << it->second << std::endl;
 			return true;
+			//return it->second;
 		}
 	}
-	return false;
 }

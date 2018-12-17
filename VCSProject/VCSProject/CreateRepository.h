@@ -5,14 +5,15 @@
 #include <string>
 #include <experimental/filesystem>
 
-namespace fs = std::experimental::filesystem;
+#include <chrono>
+#include <iomanip>
 
+namespace fs = std::experimental::filesystem;
+using namespace std::chrono_literals;
 
 std::string artifactID(fs::path);
 void createRepository(std::string, std::string);
-
-bool dirNotExist(const std::string& name);
-
+bool dirNotExist(const std:: string& name);
 
 std::string artifactID(fs::path directoryPath) {
 	std::string artifactFile;
@@ -55,42 +56,44 @@ std::string artifactID(fs::path directoryPath) {
 void createRepository(std::string existingDirectory, std::string newDirectory) {
 	fs::path currentPath = existingDirectory;
 	fs::path newPath = newDirectory;
-
+	auto ftime = fs::last_write_time(newPath);
+	std:: time_t cftime = decltype(ftime)::clock::to_time_t(ftime);			 //Assumes system clock?
 	fs::create_directories(newPath);
 
 	std::ofstream manifestFile;
 	fs::path manifest = newPath /= "manifest.txt";
 
+	// std::cout << "current path: " << currentPath << std::endl;
 	manifestFile.open(manifest, std::ios_base::app);
-
+	manifestFile << "Creating Repository:\t"<<  "\tFile last modified at\t"<< std::asctime(std::localtime(&cftime))<<std::endl;
+//	fs::copy(existingDirectory, newDirectory, fs::copy_options::recursive);
 	for (auto it = fs::recursive_directory_iterator(currentPath); it != fs::recursive_directory_iterator(); ++it) {
-		fs::path path = it->path(); // Path to track current iterator path
-		
-
+		fs:: path path = it->path(); //Path to track current iterator path
+	
 		std::string targetPath = path.string(); // TargetPath is string to use substr
-		targetPath = targetPath.substr(targetPath.find_first_of('\\')); // and get rest of path after TestFolder\'
-		
-		if (dirNotExist(path.string())) {
-			fs::create_directories(newDirectory + targetPath);
+		targetPath = targetPath.substr(targetPath.find_first_of("//")); // and get rest of path after TestFolder\'
 
-			if (fs::is_regular_file(path)) {
-				std::string newArtifact = artifactID(path);
-				manifestFile << newArtifact << std::endl;
-				fs::copy_file(path, newDirectory + targetPath + "\\" + newArtifact);
-			}
+		if (dirNotExist(path.string())) {
+				fs::create_directories(newDirectory + targetPath);
+
+				if(fs::is_regular_file(path)){
+
+							std::string newArtifact = artifactID(path);
+							manifestFile << newArtifact << "\tFile last modified at\t"<< std::asctime(std::localtime(&cftime))<<std::endl;
+							fs::copy_file(path, newDirectory +targetPath + "//" + newArtifact);
+				}
 		}
 	}
-
-	manifestFile.close();
+		manifestFile.close();
+//	std::cout << "Repository successfully created." << std::endl;
 }
 
-// Function used from: https://stackoverflow.com/questions/12774207/fastest-way-to-check-if-a-file-exist-using-standard-c-c11-c
-bool dirNotExist(const std::string& name) {
-	if (FILE *file = fopen(name.c_str(), "r")) {
-		fclose(file);
-		return true;
-	}
-	else {
-		return false;
-	}
+bool dirNotExist(const std::string& name){
+		if(FILE *file = fopen(name.c_str(), "r")) {
+				fclose(file);
+				return true;
+		}
+		else {
+				return false;
+		}
 }
